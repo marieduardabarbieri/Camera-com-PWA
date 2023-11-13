@@ -14,9 +14,9 @@ if ('serviceWorker' in navigator) {
   }
 
 
-let fmode = 'user'
+let camMode = 'user';
 //configurando as constraintes do video stream
-var constraints = { video: { facingMode: fmode }, audio:false };
+var constraints = { video: { facingMode: camMode }, audio:false };
 
 const cameraView = document.querySelector("#camera--view"),
  cameraOutput = document.querySelector("#camera--output"),
@@ -44,6 +44,20 @@ cameraTrigger.onclick = function (){
     cameraOutput.src = cameraSensor.toDataURL("image/webp");
     cameraOutput.classList.add("taken");
 };
+
+frenteTraz.onclick = function (){
+  stopMediaTracks(cameraView.srcObject);
+  camMode = camMode === "user" ? "environment" : "user";
+  constraints = { video: {facingMode: camMode }, audio: false };
+  console.log(constraints);
+  cameraStart();
+}
+
+function stopMediaTracks(stream){
+  stream.getTracks().forEach(track => {
+    track.stop();
+  })
+}
 
 //carrega a img quando a janeça carregar
 window.addEventListener("load", cameraStart, false)
